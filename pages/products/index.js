@@ -1,11 +1,16 @@
 import Layout from "@/components/Layout"
+import Link from "next/link"
 
 
 function index() {
   return (
+    <>
     <Layout>
-      <div>index</div>
+        products
+        <hr />
+        <Link href="/products/new">New</Link>
     </Layout>
+    </>
   )
 }
 
