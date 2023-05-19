@@ -3,6 +3,7 @@ import axios from "axios";
 import Link from "next/link";
 
 function index({ users }) {
+
   return (
     <>
       <Layout>
@@ -14,19 +15,30 @@ function index({ users }) {
               <th>Role</th>
               <th>Name</th>
               <th>Email</th>
-              {/*TODO: incluir delete con confirmacion */}
-              {/*TODO: incluir deshabilitar/habilitar con confirmacion */}
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user, i) => (
-              <tr key={i.toString()}>
-                <td><Link href={`/users/${user.uid}`}>{user.username}</Link></td>
-                <td>{user.role}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
+            {users.length === 0 ? (
+              <tr>
+                <td colSpan={5}>empty</td>
               </tr>
-            ))}
+            ) : (
+              users.map((user, i) => (
+                <tr key={i.toString()}>
+                  <td>
+                    <Link href={`/users/${user.uid}`}>{user.username}</Link>
+                  </td>
+                  <td>{user.role}</td>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    <button onClick={() => delUser(user.uid)}>Delete</button>
+                    <button>Passw</button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </Layout>
@@ -41,6 +53,6 @@ export async function getServerSideProps(context) {
   return {
     props: {
       users,
-    }, // will be passed to the page component as props
+    },
   };
 }

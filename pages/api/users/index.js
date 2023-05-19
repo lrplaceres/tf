@@ -24,7 +24,7 @@ const getAllUsers = async (req, res) => {
 
 const addUser = async (req, res) => {
   try {
-    const { uid, username, password, role, name, email } = req.body;
+    const { uid, username, password, role, name, email,enabled } = req.body;
 
     let exist = await countByUser(username);
     if (exist[0].cont == 0) {
@@ -36,6 +36,7 @@ const addUser = async (req, res) => {
         role,
         name,
         email,
+        enabled
       });
       return res.status(200).json({ username, username });
     }

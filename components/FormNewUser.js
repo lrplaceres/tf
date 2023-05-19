@@ -2,25 +2,24 @@ import axios from "axios";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
+import { useRouter } from "next/router";
 
 function FormNewUser() {
+  const router = useRouter();
+
   const [user, setUser] = useState({
-    uid: "",
+    uid: uuidv4(),
     name: "",
     email: "",
     username: "",
     password: "",
     retype: "",
     role: "dependiente",
-    //TODO: incluir el campo enabled
+    enabled: true,
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    //TODO: hacer update
-
-    user.uid === "" ? setUser({ ...user, uid: uuidv4() }) : "";
 
     //TODO: validacion js de los datos antes de enviar
 
@@ -35,6 +34,7 @@ function FormNewUser() {
         "$2a$10$CwTycUXWue0Thq9StjUM0u"
       );
       const res = await axios.post("/api/users", user);
+      router.push("/users");
       //console.log(res)
     } catch (error) {
       console.log(error);
@@ -49,10 +49,25 @@ function FormNewUser() {
     <>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">Name</label>
-        <input type="text" name="name" id="name" onChange={handleChange} minLength={3} maxLength={35} required/>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          onChange={handleChange}
+          minLength={3}
+          maxLength={35}
+          required
+        />
         <br />
         <label htmlFor="email">Email</label>
-        <input type="email" name="email" id="email" onChange={handleChange} maxLength={35} required/>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          onChange={handleChange}
+          maxLength={35}
+          required
+        />
         <br />
         <label htmlFor="username">Username</label>
         <input
@@ -73,6 +88,7 @@ function FormNewUser() {
           onChange={handleChange}
           minLength={6}
           maxLength={35}
+          autoComplete="off"
           required
         />
         <br />
@@ -84,6 +100,7 @@ function FormNewUser() {
           onChange={handleChange}
           minLength={3}
           maxLength={35}
+          autoComplete="off"
           required
         />
         <br />
@@ -97,9 +114,18 @@ function FormNewUser() {
         <br />
 
         <button type="reset">Clear</button>
-        {/*TODO: deshabilitar el boton accept habilitar si todos los campos estan llenos y validado el usuario*/}
-        <button type="submit">Accept</button>
+        
+        <button
+          type="submit"
+          disabled={
+            !user.name || !user.username || !user.password || !user.retype
+          }
+        >
+          Accept
+        </button>
       </form>
+
+      
     </>
   );
 }
