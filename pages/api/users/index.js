@@ -28,7 +28,6 @@ const addUser = async (req, res) => {
 
     let exist = await countByUser(username);
     if (exist[0].cont == 0) {
-      //TODO: incluir campo enabled
       const [result] = await pool.promise().query("INSERT INTO users SET ?", {
         uid,
         username,

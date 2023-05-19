@@ -1,17 +1,21 @@
-import Layout from "@/components/Layout"
-import Link from "next/link"
+import Layout from "@/components/Layout";
+import Head from "next/head";
 
+import Link from "next/link";
 
 function index() {
   return (
     <>
-    <Layout>
+      <Head>
+        <title>TF | Products</title>
+      </Head>
+      <Layout>
         products
         <hr />
         <Link href="/products/new">New</Link>
-    </Layout>
+      </Layout>
     </>
-  )
+  );
 }
 
-export default index
+export default index;

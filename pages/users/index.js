@@ -1,11 +1,14 @@
 import Layout from "@/components/Layout";
 import axios from "axios";
+import Head from "next/head";
 import Link from "next/link";
 
 function index({ users }) {
-
   return (
     <>
+      <Head>
+        <title>TF | Users</title>
+      </Head>
       <Layout>
         <Link href="/users/new">New</Link>
         <table>
