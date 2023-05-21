@@ -29,3 +29,16 @@ const addProduct = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+const getAllProducts = async (req, res) => {
+  try {
+    const [result] = await pool
+      .promise()
+      .query(
+        "SELECT uid as id,name,price,category FROM products ORDER BY category ASC, name ASC"
+      );
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

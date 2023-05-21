@@ -6,13 +6,10 @@ function newProduct() {
   return (
     <>
       <Head>
-        <title>TF | New Product</title>
+        <title>TF | Nuevo Producto</title>
       </Head>
       <Layout>
-        <fieldset>
-          <legend>Form insert Product</legend>
         <FormNewProduct />
-        </fieldset>
       </Layout>
     </>
   );

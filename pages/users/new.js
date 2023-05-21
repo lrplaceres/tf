@@ -6,7 +6,7 @@ function newUser() {
   return (
     <>
       <Head>
-        <title>TF | New User</title>
+        <title>TF | Nuevo Usuario</title>
       </Head>
       <Layout>
           <FormNewUser />

@@ -54,7 +54,7 @@ function FormEditUser() {
   };
 
   const handleChange = ({ target: { name, value } }) => {
-    setUser({ ...user, [name]: value });    
+    setUser({ ...user, [name]: value });
   };
 
   const handleChangePassw = ({ target: { value } }) => {
@@ -81,8 +81,8 @@ function FormEditUser() {
     try {
       await axios.put(`/api/users/${router.query.id}`, user);
       toast.success("Se ha editado el usuario");
-      setTimeout(()=>router.push("/users"), 500);
-     router.push("/users")
+      setTimeout(() => router.push("/users"), 500);
+      router.push("/users");
     } catch (error) {
       toast.error("Ha ocurrido un error. Contacte al administrador");
     }
@@ -92,7 +92,7 @@ function FormEditUser() {
     try {
       await axios.delete(`/api/users/${id}`);
       toast.success("Se ha eliminado el usuario " + user.username);
-      setTimeout(()=>router.push("/users"), 500);
+      setTimeout(() => router.push("/users"), 500);
     } catch (error) {
       toast.error("Ha ocurrido un error. Contacte al administrador");
     }
@@ -106,7 +106,7 @@ function FormEditUser() {
       await axios.post(`/api/users/${id}`, {
         passw: bcrypt.hashSync(passw, "$2a$10$CwTycUXWue0Thq9StjUM0u"),
       });
-      handleClose2()
+      handleClose2();
       toast.success("Se ha cambiado la contraseña");
     } catch (error) {
       toast.error("Ha ocurrido un error. Contacte al administrador");
@@ -137,7 +137,7 @@ function FormEditUser() {
               maxLength={35}
               required
               fullWidth
-              sx={{ mb: "1rem" }}
+              sx={{ mb: "0.5rem" }}
             />
 
             <TextField
@@ -150,7 +150,7 @@ function FormEditUser() {
               required
               type="email"
               fullWidth
-              sx={{ mb: "1rem" }}
+              sx={{ mb: "0.5rem" }}
             />
 
             <FormControl fullWidth>
@@ -162,7 +162,7 @@ function FormEditUser() {
                 label="Rol"
                 onChange={handleChange}
                 name="role"
-                sx={{ mb: "1rem" }}
+                sx={{ mb: "0.5rem" }}
               >
                 <MenuItem value="dependiente">Dependiente</MenuItem>
                 <MenuItem value="cantinero">Cantinero</MenuItem>
@@ -180,7 +180,7 @@ function FormEditUser() {
                 label="Habilitado"
                 onChange={handleChange}
                 name="enabled"
-                sx={{ mb: "1rem" }}
+                sx={{ mb: "0.5rem" }}
               >
                 <MenuItem value="1">Si</MenuItem>
                 <MenuItem value="0">No</MenuItem>

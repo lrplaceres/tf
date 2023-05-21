@@ -6,7 +6,7 @@ function edit() {
   return (
     <>
       <Head>
-        <title>TF | Edit Users</title>
+        <title>TF | Editar Usuario</title>
       </Head>
       <Layout>
         <FormEditUser />

@@ -34,7 +34,7 @@ function index({ users }) {
   return (
     <>
       <Head>
-        <title>TF | Users</title>
+        <title>TF | Usuarios</title>
       </Head>
       <Layout>
         <Link href="/users/new">New</Link>

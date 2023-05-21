@@ -82,7 +82,7 @@ function FormNewUser() {
               maxLength={35}
               required
               fullWidth
-              sx={{ mb: "1rem" }}
+              sx={{ mb: "0.5rem" }}
             />
             <TextField
               id="email"
@@ -93,7 +93,7 @@ function FormNewUser() {
               required
               type="email"
               fullWidth
-              sx={{ mb: "1rem" }}
+              sx={{ mb: "0.5rem" }}
             />
             <TextField
               id="username"
@@ -104,7 +104,7 @@ function FormNewUser() {
               maxLength={35}
               required
               fullWidth
-              sx={{ mb: "1rem" }}
+              sx={{ mb: "0.5rem" }}
             />
             <TextField
               id="password"
@@ -117,7 +117,7 @@ function FormNewUser() {
               autoComplete="off"
               required
               fullWidth
-              sx={{ mb: "1rem" }}
+              sx={{ mb: "0.5rem" }}
             />
             <TextField
               id="retype"
@@ -130,7 +130,7 @@ function FormNewUser() {
               autoComplete="off"
               required
               fullWidth
-              sx={{ mb: "1rem" }}
+              sx={{ mb: "0.5rem" }}
             />
 
             <FormControl fullWidth>
@@ -142,7 +142,7 @@ function FormNewUser() {
                 label="Rol"
                 onChange={handleChange}
                 name="role"
-                sx={{ mb: "1rem" }}
+                sx={{ mb: "0.5rem" }}
               >
                 <MenuItem value="dependiente">Dependiente</MenuItem>
                 <MenuItem value="cantinero">Cantinero</MenuItem>
