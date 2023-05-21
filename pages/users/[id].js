@@ -9,10 +9,7 @@ function edit() {
         <title>TF | Edit Users</title>
       </Head>
       <Layout>
-        <fieldset>
-          <legend>Form edit User</legend>
-          <FormEditUser />
-        </fieldset>
+        <FormEditUser />
       </Layout>
     </>
   );

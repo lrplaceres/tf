@@ -1,5 +1,7 @@
 import Head from "next/head";
 import Navbar from "./Navbar";
+import { Container } from "@mui/material";
+import { ToastContainer } from "react-toastify";
 
 function Layout({ children }) {
   return (
@@ -9,7 +11,8 @@ function Layout({ children }) {
       </Head>
       <Navbar />
       <hr />
-      {children}
+      <Container maxWidth="xl">{children}</Container>
+      <ToastContainer />
     </>
   );
 }

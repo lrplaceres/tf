@@ -9,10 +9,7 @@ function newUser() {
         <title>TF | New User</title>
       </Head>
       <Layout>
-        <fieldset>
-          <legend>Form insert user</legend>
           <FormNewUser />
-        </fieldset>
       </Layout>
     </>
   );

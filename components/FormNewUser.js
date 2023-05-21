@@ -3,6 +3,20 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 import { useRouter } from "next/router";
+import {
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Card,
+  Container,
+  Typography,
+} from "@mui/material";
+import DoneIcon from "@mui/icons-material/Done";
+import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
+import { toast } from "react-toastify";
 
 function FormNewUser() {
   const router = useRouter();
@@ -20,24 +34,22 @@ function FormNewUser() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    //TODO: validacion js de los datos antes de enviar
-
-    if (user.password != user.retype) {
-      alert("No match");
-      return;
-    }
-
+    //TODO:validar usuario antes de enviar
     try {
+      if (user.password != user.retype) {
+        return toast.error("Las contraseñas deben coincidir");
+      }
+
       user.password = bcrypt.hashSync(
         user.password,
         "$2a$10$CwTycUXWue0Thq9StjUM0u"
       );
+
       const res = await axios.post("/api/users", user);
-      router.push("/users");
-      //console.log(res)
+      toast.success("Se ha creado el usuario");
+      setTimeout(() => router.push("/users"), 500);
     } catch (error) {
-      console.log(error);
+      toast.error("Ha ocurrido un error. Contacte al administrador");
     }
   };
 
@@ -45,87 +57,124 @@ function FormNewUser() {
     setUser({ ...user, [name]: value });
   };
 
+  const handleReset = () => {
+    setUser({
+      name: "",
+      email: "",
+      username: "",
+      password: "",
+      retype: "",
+      role: "dependiente",
+    });
+  };
+
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          onChange={handleChange}
-          minLength={3}
-          maxLength={35}
-          required
-        />
-        <br />
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          onChange={handleChange}
-          maxLength={35}
-          required
-        />
-        <br />
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          name="username"
-          id="username"
-          onChange={handleChange}
-          minLength={3}
-          maxLength={35}
-          required
-        />
-        <br />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          onChange={handleChange}
-          minLength={6}
-          maxLength={35}
-          autoComplete="off"
-          required
-        />
-        <br />
-        <label htmlFor="retype">Retype</label>
-        <input
-          type="password"
-          name="retype"
-          id="retype"
-          onChange={handleChange}
-          minLength={3}
-          maxLength={35}
-          autoComplete="off"
-          required
-        />
-        <br />
-        <label htmlFor="role">Role</label>
-        <select name="role" id="role" onChange={handleChange}>
-          <option value="dependiente">Dependiente</option>
-          <option value="cantinero">Cantinero</option>
-          <option value="cocinero">Cocinero</option>
-          <option value="administrador">Administrador</option>
-        </select>
-        <br />
+      <Container maxWidth="sm">
+        <Card sx={{ p: "1rem" }}>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              id="name"
+              label="Nombre"
+              onChange={handleChange}
+              name="name"
+              minLength={3}
+              maxLength={35}
+              required
+              fullWidth
+              sx={{ mb: "1rem" }}
+            />
+            <TextField
+              id="email"
+              label="Correo Electrónico"
+              onChange={handleChange}
+              name="email"
+              maxLength={35}
+              required
+              type="email"
+              fullWidth
+              sx={{ mb: "1rem" }}
+            />
+            <TextField
+              id="username"
+              label="Usuario"
+              onChange={handleChange}
+              name="username"
+              minLength={3}
+              maxLength={35}
+              required
+              fullWidth
+              sx={{ mb: "1rem" }}
+            />
+            <TextField
+              id="password"
+              label="Constraseña"
+              onChange={handleChange}
+              type="password"
+              name="password"
+              minLength={6}
+              maxLength={35}
+              autoComplete="off"
+              required
+              fullWidth
+              sx={{ mb: "1rem" }}
+            />
+            <TextField
+              id="retype"
+              label="Repite Constraseña"
+              onChange={handleChange}
+              type="password"
+              name="retype"
+              minLength={6}
+              maxLength={35}
+              autoComplete="off"
+              required
+              fullWidth
+              sx={{ mb: "1rem" }}
+            />
 
-        <button type="reset">Clear</button>
-        
-        <button
-          type="submit"
-          disabled={
-            !user.name || !user.username || !user.password || !user.retype
-          }
-        >
-          Accept
-        </button>
-      </form>
+            <FormControl fullWidth>
+              <InputLabel id="role-label">Rol</InputLabel>
+              <Select
+                labelId="role-label"
+                id="role"
+                value={user.role}
+                label="Rol"
+                onChange={handleChange}
+                name="role"
+                sx={{ mb: "1rem" }}
+              >
+                <MenuItem value="dependiente">Dependiente</MenuItem>
+                <MenuItem value="cantinero">Cantinero</MenuItem>
+                <MenuItem value="cocinero">Cocinero</MenuItem>
+                <MenuItem value="administrador">Administrador</MenuItem>
+              </Select>
+            </FormControl>
 
-      
+            <Button
+              variant="contained"
+              color="inherit"
+              type="reset"
+              startIcon={<CleaningServicesIcon />}
+              onClick={handleReset}
+              sx={{ mr: "0.5rem" }}
+            >
+              Limpiar
+            </Button>
+            <Button
+              variant="contained"
+              color="success"
+              type="submit"
+              disabled={
+                !user.name || !user.username || !user.password || !user.retype
+              }
+              startIcon={<DoneIcon />}
+            >
+              Aceptar
+            </Button>
+          </form>
+        </Card>
+      </Container>
     </>
   );
 }

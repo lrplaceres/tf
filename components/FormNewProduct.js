@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
 
 function FormNewProduct() {
   const router = useRouter();
@@ -23,8 +24,12 @@ function FormNewProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("/api/products",product);
-    router.push("/products")
+    try {
+      await axios.post("/api/products", product);
+      router.push("/products");
+    } catch (error) {
+      toast.error("Ha ocurrido un error. Contacte al administrador");
+    }
   };
 
   return (

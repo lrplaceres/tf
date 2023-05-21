@@ -1,0 +1,13 @@
+body {
+  background-color: #e2e4e7;
+}
+
+@media handheld, only screen and (max-width: 767px) {
+  .only-pc {
+    display: none;
+  }
+}
+
+.decoration-none {
+  text-decoration: none;
+}
