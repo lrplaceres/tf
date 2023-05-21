@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
@@ -12,17 +12,30 @@ import {
   Select,
   InputLabel,
   MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function FormNewProduct() {
   const router = useRouter();
 
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const [product, setProduct] = useState({
     uid: uuidv4(),
     name: "",
-    photo: "",
     description: "",
     price: "",
     cost: "",
@@ -37,24 +50,58 @@ function FormNewProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/products", product);
-      router.push("/products");
+      if (router.query.id) {
+        await axios.put(`/api/products/${router.query.id}`, product);
+        toast.success("Se ha editado el producto");
+      } else {
+        await axios.post("/api/products", product);
+        toast.success("Se ha creado el producto");
+        setTimeout(() => router.push("/products"), 500);
+      }
     } catch (error) {
       toast.error("Ha ocurrido un error. Contacte al administrador");
     }
   };
 
-  const handleReset = ()=>{
-    setProduct({
-      name: "",
-    photo: "",
-    description: "",
-    price: "",
-    cost: "",
-    category: "Shots",
-    enabled: 0,
-    })
-  }
+  const handleReset = () => {
+    if (router.query.id) {
+      getProducts();
+    } else {
+      setProduct({
+        name: "",
+        description: "",
+        price: "",
+        cost: "",
+        category: "Shots",
+        enabled: 0,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (router.query.id) {
+      getProducts();
+    }
+  }, []);
+
+  const getProducts = async () => {
+    try {
+      const { data } = await axios.get("/api/products/" + router.query.id);
+      setProduct(data);
+    } catch (error) {
+      toast.error("Ha ocurrido un error. Contacte al administrador");
+    }
+  };
+
+  const delProduct = async (id) => {
+    try {
+      await axios.delete(`/api/products/${id}`);
+      toast.success("Se ha eliminado el producto " + product.name);
+      setTimeout(() => router.push("/products"), 500);
+    } catch (error) {
+      toast.error("Ha ocurrido un error. Contacte al administrador");
+    }
+  };
 
   return (
     <>
@@ -70,17 +117,8 @@ function FormNewProduct() {
               required
               fullWidth
               sx={{ mb: "0.5rem" }}
+              value={product.name}
             />
-            <Button
-              variant="contained"
-              component="label"
-              fullWidth
-              sx={{ mb: "0.5rem" }}
-            >
-              Seleccione la imagen
-              <input type="file" hidden onChange={handleChange} name="photo" />
-            </Button>
-
             <TextField
               id="description"
               label="Descripción"
@@ -88,6 +126,7 @@ function FormNewProduct() {
               name="description"
               fullWidth
               sx={{ mb: "0.5rem" }}
+              value={product.description}
             />
 
             <TextField
@@ -99,6 +138,7 @@ function FormNewProduct() {
               fullWidth
               sx={{ mb: "0.5rem" }}
               name="price"
+              value={product.price}
             />
 
             <TextField
@@ -109,6 +149,7 @@ function FormNewProduct() {
               fullWidth
               sx={{ mb: "0.5rem" }}
               name="cost"
+              value={product.cost}
             />
 
             <FormControl fullWidth>
@@ -172,10 +213,47 @@ function FormNewProduct() {
             >
               Aceptar
             </Button>
-            
           </form>
         </Card>
+
+        {router.query.id && (
+          <Card sx={{ textAlign: "center", mt: "1.5rem", p: "1rem" }}>
+            <Button
+              variant="contained"
+              color="error"
+              startIcon={<DeleteIcon />}
+              onClick={handleClickOpen}
+            >
+              Eliminar
+            </Button>
+          </Card>
+        )}
       </Container>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+      >
+        <DialogTitle>Eliminar Producto</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Confirme para <strong>eliminar</strong> este producto.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="primary" onClick={handleClose}>
+            Cancelar
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => delProduct(product.uid)}
+          >
+            Aceptar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

@@ -2,13 +2,6 @@ import Layout from "@/components/Layout";
 import {
   Stack,
   Card,
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Container,
 } from "@mui/material";
 import axios from "axios";
@@ -16,16 +9,18 @@ import Head from "next/head";
 import { DataGrid } from "@mui/x-data-grid";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
 
 function index({ products }) {
 
   const columns = [
     {
-      field: "name",
-      flex: 1,
+      field: "Link",
       headerName: "Nombre",
-    },
+      flex: 1,
+      renderCell: (params) =>(
+        <Link href={`/products/${params.row.id}`} className="decoration-none">{params.row.name}</Link>
+      )      
+    },    
     {
       field: "price",
       headerName: "Precio",
@@ -33,9 +28,8 @@ function index({ products }) {
     {
       field: "category",
       headerName: "Categoría",
-    },
+    }    
   ];
-
   
   return (
     <>
