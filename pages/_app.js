@@ -4,11 +4,12 @@ import "nprogress/nprogress.css";
 import "nprogress/nprogress.js";
 import { useEffect } from "react";
 import NProgress from "nprogress";
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
-import 'react-toastify/dist/ReactToastify.css';
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+import "react-toastify/dist/ReactToastify.css";
+import { NotasProvider } from "@/context/notasContext";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -24,5 +25,9 @@ export default function App({ Component, pageProps }) {
     };
   }, []);
 
-  return <Component {...pageProps} />;
+  return (
+    <NotasProvider>
+      <Component {...pageProps} />
+    </NotasProvider>
+  );
 }
