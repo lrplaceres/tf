@@ -24,7 +24,7 @@ import axios from "axios";
 import TabNotas from "@/components/TabNotas";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-function index({ categories }) {
+function index({ categories,products }) {
   const { createNota } = useNotas();
   const { notas } = useNotas();
 
@@ -44,8 +44,6 @@ function index({ categories }) {
   const [newNota, setNewNota] = useState({
     uid: uuidv4(),
     mesa: "",
-    cuenta: "",
-    pago: "",
   });
 
   const handleChangeNewNota = ({ target: { name, value } }) => {
@@ -75,42 +73,10 @@ function index({ categories }) {
           Crear Nota
         </Button>
         <Grid container spacing={1}>
-          <Grid item xs={5}>
-            {categories.length === 0 ? (
-              <Card sx={{ p: "1rem", mb: "0.5rem" }}>
-                <Stack sx={{ width: "100%" }} spacing={2}>
-                  <Alert severity="info">No hay Categorías disponibles</Alert>
-                </Stack>
-              </Card>
-            ) : (
-              <>
-                {categories.map((category, i) => (
-                  <Accordion
-                    key={i.toString()}
-                    onChange={() => console.log(category.name)}
-                  >
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                    >
-                      <Typography>{category.name}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <Typography>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Suspendisse malesuada lacus ex, sit amet blandit leo
-                        lobortis eget.
-                      </Typography>
-                    </AccordionDetails>
-                  </Accordion>
-                ))}
-              </>
-            )}
-          </Grid>
+    
 
-          <Grid item xs={7}>
-            <TabNotas notas={notas} />
+          <Grid item xs={12}>
+            <TabNotas notas={notas} products={products} categories={categories} />
           </Grid>
         </Grid>
       </Layout>
@@ -130,22 +96,7 @@ function index({ categories }) {
             fullWidth
             onChange={handleChangeNewNota}
           />
-          <TextField
-            id="cuenta"
-            label="Tipo de cuenta"
-            name="cuenta"
-            fullWidth
-            sx={{ mb: "0.5rem" }}
-            onChange={handleChangeNewNota}
-          />
-          <TextField
-            id="pago"
-            label="Tipo de pago"
-            name="pago"
-            fullWidth
-            sx={{ mb: "0.5rem" }}
-            onChange={handleChangeNewNota}
-          />
+         
         </DialogContent>
         <DialogActions>
           <Button color="primary" onClick={handleClose}>
@@ -171,10 +122,14 @@ export async function getServerSideProps(context) {
   const { data: categories } = await axios.get(
     "http://localhost:3000/api/products/categories"
   );
+  const { data: products } = await axios.get(
+    "http://localhost:3000/api/products"
+  );
 
   return {
     props: {
       categories,
+      products,
     },
   };
 }

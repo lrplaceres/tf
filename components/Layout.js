@@ -11,7 +11,7 @@ function Layout({ children }) {
       </Head>
       <Navbar />
       <hr />
-      <Container maxWidth="xl">{children}</Container>
+      <Container maxWidth="xl" sx={{marginTop:"4rem"}}>{children}</Container>
       <ToastContainer />
     </>
   );
