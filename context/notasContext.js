@@ -7,8 +7,8 @@ export const useNotas = () => useContext(NotasContext);
 export const NotasProvider = ({ children }) => {
   const [notas, setNotas] = useState([]);
 
-  const createNota = (uid, mesa, cuenta, pago) => {
-    setNotas([...notas, { uid, mesa, cuenta, pago }]);
+  const createNota = (uid, mesa) => {
+    setNotas([...notas, { uid, mesa }]);
   };
 
   return (

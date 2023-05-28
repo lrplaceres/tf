@@ -25,13 +25,13 @@ const getProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   const { id } = req.query;
-  const { name, description, price, cost, category, enabled } = req.body;
+  const { name, description, price, category, enabled } = req.body;
   try {
     await pool
       .promise()
       .query(
-        "UPDATE products SET name = ?, description = ?, price = ?, cost = ?, category = ?, enabled = ? WHERE uid = ?",
-        [name, description, price, cost, category, enabled, id]
+        "UPDATE products SET name = ?, description = ?, price = ?, category = ?, enabled = ? WHERE uid = ?",
+        [name, description, price, category, enabled, id]
       );
     return res.status(204).json();
   } catch (error) {

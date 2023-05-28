@@ -3,12 +3,9 @@ import {
   Stack,
   Card,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Link from "next/link";
 
-function TabNotas({ notas, products, categories }) {
-
-
+function TabNotas({ notas}) {
 
   return (
     <>

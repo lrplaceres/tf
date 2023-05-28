@@ -6,12 +6,11 @@ import {
   Container,
   IconButton,
   Menu,
-  Tooltip,
   Toolbar,
   Typography,
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+import LocalCafeIcon from '@mui/icons-material/LocalCafe';
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 import { useState } from "react";
@@ -45,12 +44,10 @@ function Navbar() {
       <AppBar position="fixed">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+            <LocalCafeIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
             <Typography
               variant="h6"
               noWrap
-              //component="a"
-              //href="/"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -115,12 +112,10 @@ function Navbar() {
               </Menu>
             </Box>
 
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+            <LocalCafeIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
             <Typography
               variant="h5"
               noWrap
-              //component="a"
-              //href=""
               sx={{
                 mr: 2,
                 display: { xs: "flex", md: "none" },

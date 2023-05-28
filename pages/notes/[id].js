@@ -1,20 +1,48 @@
 import Layout from "@/components/Layout";
-import { Card, Button, Grid, Stack, Chip, Badge } from "@mui/material";
+import { Card, Button, Grid, Typography } from "@mui/material";
 import axios from "axios";
 import Head from "next/head";
-import {useRef } from "react";
+import { useState } from "react";
 
 function showNote({ categories, products }) {
-  const ref = useRef(null);
+  const [pedido, setPedido] = useState([]);
+  const [total, setTotal] = useState(0);
 
-  const searchProductXCategory = (category) => {    
-   const divAll = document.querySelectorAll('[id^="_product"]')
-   const div = document.getElementById(category.toString());
-   divAll.forEach(element => {
-    element.classList.remove("display-block")
-    element.classList.add("display-none")
-   });
-      div.classList.add("display-block");
+  const searchProductXCategory = (category) => {
+    const divAll = document.querySelectorAll('[id^="_product"]');
+    const div = document.getElementById(category.toString());
+    divAll.forEach((element) => {
+      element.classList.remove("display-block");
+      element.classList.add("display-none");
+    });
+    div.classList.add("display-block");
+  };
+
+  const handleClicProduct = (nameProduct, precio) => {
+    if (pedido.find(({ name }) => name === nameProduct)) {
+      var index = pedido.findIndex(({ name }) => name === nameProduct);
+      let copyOfPedido = [].concat(pedido);
+      copyOfPedido[index].cantidad++;
+      setPedido(copyOfPedido);
+    } else {
+      setPedido([...pedido, { name: nameProduct, cantidad: 1, precio }]);
+    }
+    setTotal(total + precio);
+  };
+
+  const handleClicPedido = (nameProduct, precio) => {
+    if (
+      pedido.find(({ name, cantidad }) => name === nameProduct && cantidad > 1)
+    ) {
+      var index = pedido.findIndex(({ name }) => name === nameProduct);
+      let copyOfPedido = [].concat(pedido);
+      copyOfPedido[index].cantidad--;
+      setPedido(copyOfPedido);
+    } else {
+      let copyOfPedido = [].concat(pedido);
+      setPedido(copyOfPedido.filter(({ name }) => name != nameProduct));
+    }
+    setTotal(total - precio);
   };
 
   return (
@@ -30,7 +58,7 @@ function showNote({ categories, products }) {
                 variant="text"
                 color="inherit"
                 onClick={async () =>
-                  await searchProductXCategory(`_product`+category.name)
+                  await searchProductXCategory(`_product` + category.name)
                 }
                 key={`bt${i.toString()}`}
               >
@@ -40,23 +68,68 @@ function showNote({ categories, products }) {
           </div>
 
           <Grid container spacing={2}>
-            <Grid item xs={8}>
+            <Grid item xs={6}>
               {categories.map((category, i) => (
-               
-                  <div ref={ref} id={`_product${category.name}`} key={i.toString()} className={i>0 ? "display-none" :"display-block"}>
-                    {products
-                      .filter((prod) => prod.category == category.name)
-                      .map((filtered,j) => (
-                        <Button variant="contained" color="info" sx={{mb:".3rem",mr:".3rem"}} key={j.toString()}>
-                          {filtered.name}
-                        </Button>
-                      ))}
-                  </div>
-               
+                <div
+                  id={`_product${category.name}`}
+                  key={i.toString()}
+                  className={i > 0 ? "display-none" : "display-block"}
+                >
+                  {products
+                    .filter((prod) => prod.category == category.name)
+                    .map((filtered, j) => (
+                      <Button
+                        variant="contained"
+                        color="info"
+                        sx={{ mb: ".3rem", mr: ".3rem" }}
+                        key={j.toString()}
+                        onClick={() =>
+                          handleClicProduct(filtered.name, filtered.price)
+                        }
+                      >
+                        {filtered.name}
+                      </Button>
+                    ))}
+                </div>
               ))}
             </Grid>
-            <Grid item xs={4}>
-              Pedido
+            <Grid item xs={6}>
+              {pedido.length === 0
+                ? ""
+                : pedido.map((ped, i) => (
+                    <div
+                      key={i.toString()}
+                      className="pedido"
+                      onClick={() => handleClicPedido(ped.name, ped.precio)}
+                    >
+                      <Grid container spacing={0}>
+                        <Grid item xs={2} className="text-center">
+                          <b>
+                            <Typography variant="button" color="initial">
+                              {ped.cantidad}
+                            </Typography>
+                          </b>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography variant="button" color="GrayText">
+                            {ped.name}
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={2}>
+                          <Typography variant="button" color="GrayText">
+                            ${ped.precio * ped.cantidad}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </div>
+                  ))}
+              {total > 0 && (
+                <Grid item xs={12} className="pedido-total">
+                  <Typography variant="button">
+                    MONTO ${total.toLocaleString()}
+                  </Typography>
+                </Grid>
+              )}
             </Grid>
           </Grid>
         </Card>

@@ -3,24 +3,29 @@ import {
   Stack,
   Card,
   Container,
+  Alert,
+  Button,
 } from "@mui/material";
 import axios from "axios";
 import Head from "next/head";
 import { DataGrid } from "@mui/x-data-grid";
-
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 function index({ products }) {
+  const router = useRouter();
 
   const columns = [
     {
       field: "Link",
       headerName: "Nombre",
       flex: 1,
-      renderCell: (params) =>(
-        <Link href={`/products/${params.row.id}`} className="decoration-none">{params.row.name}</Link>
-      )      
-    },    
+      renderCell: (params) => (
+        <Link href={`/products/${params.row.id}`} className="decoration-none">
+          {params.row.name}
+        </Link>
+      ),
+    },
     {
       field: "price",
       headerName: "Precio",
@@ -28,16 +33,18 @@ function index({ products }) {
     {
       field: "category",
       headerName: "Categoría",
-    }    
+    },
   ];
-  
+
   return (
     <>
       <Head>
         <title>TF | Productos</title>
       </Head>
       <Layout>
-        <Link href="/products/new">New</Link>
+        <Button variant="contained" color="primary" onClick={()=>router.push("/products/new")}>
+          Nuevo Producto
+        </Button>
         {products.length === 0 ? (
           <Card sx={{ p: "1rem", mb: "0.5rem" }}>
             <Stack sx={{ width: "100%" }} spacing={2}>

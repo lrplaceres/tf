@@ -38,9 +38,8 @@ function FormNewProduct() {
     name: "",
     description: "",
     price: "",
-    cost: "",
     category: "Shots",
-    enabled: 0,
+    enabled: 1,
   });
 
   const handleChange = ({ target: { name, value } }) => {
@@ -56,7 +55,7 @@ function FormNewProduct() {
       } else {
         await axios.post("/api/products", product);
         toast.success("Se ha creado el producto");
-        setTimeout(() => router.push("/products"), 500);
+        setTimeout(() => router.push("/products"), 250);
       }
     } catch (error) {
       toast.error("Ha ocurrido un error. Contacte al administrador");
@@ -71,9 +70,8 @@ function FormNewProduct() {
         name: "",
         description: "",
         price: "",
-        cost: "",
         category: "Shots",
-        enabled: 0,
+        enabled: 1,
       });
     }
   };
@@ -141,17 +139,6 @@ function FormNewProduct() {
               value={product.price}
             />
 
-            <TextField
-              type="number"
-              id="cost"
-              label="Costo"
-              onChange={handleChange}
-              fullWidth
-              sx={{ mb: "0.5rem" }}
-              name="cost"
-              value={product.cost}
-            />
-
             <FormControl fullWidth>
               <InputLabel id="categorias-label">Categorías</InputLabel>
               <Select
@@ -165,7 +152,7 @@ function FormNewProduct() {
               >
                 <MenuItem value="Shots">Shots</MenuItem>
                 <MenuItem value="Cigarros">Tabacos y Cigarros</MenuItem>
-                <MenuItem value="Cocteleria">Cocteler&iacute;a</MenuItem>
+                <MenuItem value="Coctelería">Cocteler&iacute;a</MenuItem>
                 <MenuItem value="Cremas">Cremas</MenuItem>
                 <MenuItem value="Licores">Licores</MenuItem>
                 <MenuItem value="Cognac">Cognac</MenuItem>
@@ -175,6 +162,7 @@ function FormNewProduct() {
                 <MenuItem value="Premium">Premium</MenuItem>
                 <MenuItem value="Ofertas">Ofertas especiales</MenuItem>
                 <MenuItem value="Cervezas">Cervezas</MenuItem>
+                <MenuItem value="Tapas">Tapas</MenuItem>
               </Select>
             </FormControl>
 

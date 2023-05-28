@@ -2,29 +2,20 @@ import Layout from "@/components/Layout";
 import Head from "next/head";
 import Grid from "@mui/material/Grid";
 import {
-  Alert,
-  Card,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   TextField,
-  Stack,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import { useNotas } from "@/context/notasContext";
-import axios from "axios";
 import TabNotas from "@/components/TabNotas";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-function index({ categories,products }) {
+function index() {
   const { createNota } = useNotas();
   const { notas } = useNotas();
 
@@ -36,8 +27,7 @@ function index({ categories,products }) {
     setOpen(false);
     setNewNota({
       uid: uuidv4(),
-      cuenta: "",
-      pago: "",
+      mesa: "",
     });
   };
 
@@ -55,7 +45,7 @@ function index({ categories,products }) {
       if (!newNota.mesa) {
         return toast.error("Debe insertar la mesa");
       }
-      createNota(newNota.uid, newNota.mesa, newNota.cuenta, newNota.pago);
+      createNota(newNota.uid, newNota.mesa);
       handleClose();
       toast.success(`Se ha creado con éxito la nota ${newNota.mesa}`);
     } catch (error) {
@@ -73,10 +63,10 @@ function index({ categories,products }) {
           Crear Nota
         </Button>
         <Grid container spacing={1}>
-    
-
           <Grid item xs={12}>
-            <TabNotas notas={notas} products={products} categories={categories} />
+            <TabNotas
+              notas={notas}
+            />
           </Grid>
         </Grid>
       </Layout>
@@ -96,7 +86,6 @@ function index({ categories,products }) {
             fullWidth
             onChange={handleChangeNewNota}
           />
-         
         </DialogContent>
         <DialogActions>
           <Button color="primary" onClick={handleClose}>
@@ -117,19 +106,3 @@ function index({ categories,products }) {
 }
 
 export default index;
-
-export async function getServerSideProps(context) {
-  const { data: categories } = await axios.get(
-    "http://localhost:3000/api/products/categories"
-  );
-  const { data: products } = await axios.get(
-    "http://localhost:3000/api/products"
-  );
-
-  return {
-    props: {
-      categories,
-      products,
-    },
-  };
-}
