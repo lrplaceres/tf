@@ -51,3 +51,8 @@ body {
   min-height: 3rem;
   margin-top: .5rem;
 }
+
+.item-center-left {
+  display: flex;
+  align-items: center;
+}

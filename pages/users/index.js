@@ -1,11 +1,14 @@
 import Layout from "@/components/Layout";
-import { Card, Container, Typography, Grid, Alert, Stack } from "@mui/material";
+import { Card, Container, Typography, Grid, Alert, Stack, Button } from "@mui/material";
 import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 function index({ users }) {
+const router = useRouter();
+
   const [windowSize, setWindowSize] = useState({
     width: undefined,
     height: undefined,
@@ -37,7 +40,9 @@ function index({ users }) {
         <title>TF | Usuarios</title>
       </Head>
       <Layout>
-        <Link href="/users/new">New</Link>
+        <Button variant="contained" color="primary" onClick={()=>router.push("/users/new")}>
+          Nuevo usuario
+        </Button>
         <Container maxWidth="xl">
           {users.length === 0 ? (
             <Card sx={{ p: "1rem", mb: "0.5rem" }}>
@@ -50,7 +55,7 @@ function index({ users }) {
               {users.map((user, i) => (
                 <Card sx={{ p: "1rem", mb: "0.5rem" }} key={i.toString()}>
                   <Grid container spacing={2}>
-                    <Grid item xs={windowSize.width < 767 ? 6 : 2}>                      
+                    <Grid item xs={windowSize.width < 767 ? 6 : 2} className="item-center-left">                      
                       <Typography variant="button"><Link href={`/users/${user.uid}`} className="decoration-none">{user.username}</Link></Typography>
                     </Grid>
                     <Grid item xs={windowSize.width < 767 ? 6 : 2}>

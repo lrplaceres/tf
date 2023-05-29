@@ -29,6 +29,7 @@ CREATE TABLE `products` (
   `price` float NOT NULL,
   `category` varchar(100) NOT NULL,
   `enabled` tinyint(1) DEFAULT NULL
+  PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

@@ -1,7 +1,7 @@
 import {
   Alert,
   Stack,
-  Card,
+  Card, Typography,
 } from "@mui/material";
 import Link from "next/link";
 
@@ -18,7 +18,7 @@ function TabNotas({ notas}) {
           {notas.map((nota, i) => (
             <Link href={`/notes/${nota.uid}`} className="decoration-none" key={`a${i.toString()}`}>
             <Card sx={{ p: "1rem" ,mb:".5rem"}} key={`b${i.toString()}`}>
-              <b>Mesa:</b>{nota.mesa}
+              <Typography variant="button" color="initial"><b>Mesa: </b>{nota.mesa}</Typography>              
             </Card>
             </Link>
        
