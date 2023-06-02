@@ -10,16 +10,18 @@ import {
   Typography,
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-import LocalCafeIcon from '@mui/icons-material/LocalCafe';
+import LocalCafeIcon from "@mui/icons-material/LocalCafe";
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/router";
-
-const pages = ["Productos", "Usuarios"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import { useSession, signIn, signOut } from "next-auth/react";
 
 function Navbar() {
+  const { data: session } = useSession();
+  console.log(session);
+  const router = useRouter();
+
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -38,13 +40,14 @@ function Navbar() {
     setAnchorElUser(null);
   };
 
-  const router = useRouter();
   return (
     <>
-      <AppBar position="fixed">
+      <AppBar position="fixed" color="primary" sx={{ marginTop: "2px" }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <LocalCafeIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+            <LocalCafeIcon
+              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            />
             <Typography
               variant="h6"
               noWrap
@@ -94,10 +97,7 @@ function Navbar() {
               >
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">
-                    <Link
-                      href="/products"
-                      className="decoration-none"
-                    >
+                    <Link href="/products" className="decoration-none">
                       Productos
                     </Link>
                   </Typography>
@@ -112,7 +112,9 @@ function Navbar() {
               </Menu>
             </Box>
 
-            <LocalCafeIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+            <LocalCafeIcon
+              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+            />
             <Typography
               variant="h5"
               noWrap
@@ -166,11 +168,16 @@ function Navbar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography
+                    textAlign="center"
+                    component="a"
+                    onClick={() => signOut()}
+                    sx={{ width: "100%" }}
+                  >
+                    Salir
+                  </Typography>
+                </MenuItem>
               </Menu>
             </Box>
           </Toolbar>

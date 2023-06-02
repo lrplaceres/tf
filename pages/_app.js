@@ -10,8 +10,10 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "react-toastify/dist/ReactToastify.css";
 import { NotasProvider } from "@/context/notasContext";
+import { SessionProvider } from "next-auth/react";
+import nProgress from "nprogress";
 
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps: { session, ...pageProps } }) {
   const router = useRouter();
 
   useEffect(() => {
@@ -26,8 +28,10 @@ export default function App({ Component, pageProps }) {
   }, []);
 
   return (
-    <NotasProvider>
-      <Component {...pageProps} />
-    </NotasProvider>
+    <SessionProvider session={session}>
+      <NotasProvider>
+        <Component {...pageProps} />
+      </NotasProvider>
+    </SessionProvider>
   );
 }
