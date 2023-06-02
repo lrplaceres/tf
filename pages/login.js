@@ -8,6 +8,7 @@ export default function SignIn({ csrfToken }) {
     <>
       <Head>
         <title>TF | Entrar</title>
+        <link rel="icon" href="/coffecupsilhouette_89235.ico" sizes="any" />
       </Head>
       <Container
         maxWidth="sm"

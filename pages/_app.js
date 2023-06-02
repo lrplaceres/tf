@@ -11,7 +11,6 @@ import "@fontsource/roboto/700.css";
 import "react-toastify/dist/ReactToastify.css";
 import { NotasProvider } from "@/context/notasContext";
 import { SessionProvider } from "next-auth/react";
-import nProgress from "nprogress";
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   const router = useRouter();

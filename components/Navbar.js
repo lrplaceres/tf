@@ -15,11 +15,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 function Navbar() {
   const { data: session } = useSession();
-  console.log(session);
+  console.log(session)
   const router = useRouter();
 
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -150,7 +150,7 @@ function Navbar() {
 
             <Box sx={{ flexGrow: 0 }}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="#" />
+                <Avatar alt="R" src="#" />
               </IconButton>
               <Menu
                 sx={{ mt: "45px" }}
