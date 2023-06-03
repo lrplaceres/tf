@@ -123,8 +123,8 @@ function FormEditUser() {
     <>
       <Container maxWidth="sm">
         <Card sx={{ p: "1rem" }}>
-          <Typography variant="h6" mb={2}>
-            Username: <b>{user.username}</b>
+          <Typography variant="overline" mb={2}>
+            Editar usuario: <b>{user.username}</b>
           </Typography>
           <form onSubmit={handleSubmit}>
             <TextField

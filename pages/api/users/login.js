@@ -1,10 +1,19 @@
 import { pool } from "@/config/db";
+import { authOptions } from "pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
 
 export default async function handler(req, res) {
-  switch (req.method) {
-    case "POST":
-      return await getUser(req, res);
+  const session = await getServerSession(req, res, authOptions);
+
+  if (!session) {
+    switch (req.method) {
+      case "POST":
+        return await getUser(req, res);
+    }
   }
+
+  res.status(401).json({ message: "403" });
+  return;
 }
 
 const getUser = async (req, res) => {

@@ -1,13 +1,23 @@
 import Layout from "@/components/Layout";
-import { Card, Container, Typography, Grid, Alert, Stack, Button } from "@mui/material";
+import {
+  Card,
+  Container,
+  Typography,
+  Grid,
+  Alert,
+  Stack,
+  Button,
+} from "@mui/material";
 import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { authOptions } from "pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
 
 function index({ users }) {
-const router = useRouter();
+  const router = useRouter();
 
   const [windowSize, setWindowSize] = useState({
     width: undefined,
@@ -40,7 +50,11 @@ const router = useRouter();
         <title>TF | Usuarios</title>
       </Head>
       <Layout>
-        <Button variant="contained" color="primary" onClick={()=>router.push("/users/new")}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => router.push("/users/new")}
+        >
           Nuevo usuario
         </Button>
         <Container maxWidth="xl">
@@ -55,8 +69,19 @@ const router = useRouter();
               {users.map((user, i) => (
                 <Card sx={{ p: "1rem", mb: "0.5rem" }} key={i.toString()}>
                   <Grid container spacing={2}>
-                    <Grid item xs={windowSize.width < 767 ? 6 : 2} className="item-center-left">                      
-                      <Typography variant="button"><Link href={`/users/${user.uid}`} className="decoration-none">{user.username}</Link></Typography>
+                    <Grid
+                      item
+                      xs={windowSize.width < 767 ? 6 : 2}
+                      className="item-center-left"
+                    >
+                      <Typography variant="button">
+                        <Link
+                          href={`/users/${user.uid}`}
+                          className="decoration-none"
+                        >
+                          {user.username}
+                        </Link>
+                      </Typography>
                     </Grid>
                     <Grid item xs={windowSize.width < 767 ? 6 : 2}>
                       <Typography variant="h6">Rol</Typography>
@@ -84,6 +109,21 @@ const router = useRouter();
 export default index;
 
 export async function getServerSideProps(context) {
+    const session = await getServerSession(
+      context.req,
+      context.res,
+      authOptions
+    );
+    console.log(context.req.cookies)
+    if (session.role != "administrador") {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
+    
   const { data: users } = await axios.get("http://localhost:3000/api/users");
   return {
     props: {

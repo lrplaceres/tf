@@ -11,8 +11,7 @@ export default async function handler(req, res) {
 
 const addProduct = async (req, res) => {
   try {
-    const { uid, name, description, price,category, enabled } =
-      req.body;
+    const { uid, name, description, price, category, enabled } = req.body;
 
     const [result] = await pool.promise().query("INSERT INTO products SET ?", {
       uid,

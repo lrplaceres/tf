@@ -1,13 +1,15 @@
 import { getCsrfToken } from "next-auth/react";
 import Container from "@mui/material/Container";
-import { Card, TextField, Button, Box, Typography } from "@mui/material";
+import { TextField, Button, Box, Typography } from "@mui/material";
 import Head from "next/head";
+import { authOptions } from "pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
 
 export default function SignIn({ csrfToken }) {
   return (
     <>
       <Head>
-        <title>TF | Entrar</title>
+        <title>TF | Inicio</title>
         <link rel="icon" href="/coffecupsilhouette_89235.ico" sizes="any" />
       </Head>
       <Container
@@ -23,7 +25,8 @@ export default function SignIn({ csrfToken }) {
           sx={{
             p: "1rem",
             width: 300,
-            backgroundColor: "grey.200",
+            backgroundColor: "white",
+            boxShadow:"0px 0px 3px 1px #938d8d"
           }}
         >
           <Typography variant="overline" color="initial" align="center" component="p">Ingrese sus credenciales</Typography>
@@ -57,6 +60,19 @@ export default function SignIn({ csrfToken }) {
 }
 
 export async function getServerSideProps(context) {
+  const session = await getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
   return {
     props: {
       csrfToken: await getCsrfToken(context),

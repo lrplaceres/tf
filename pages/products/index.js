@@ -1,16 +1,12 @@
 import Layout from "@/components/Layout";
-import {
-  Stack,
-  Card,
-  Container,
-  Alert,
-  Button,
-} from "@mui/material";
+import { Stack, Card, Container, Alert, Button } from "@mui/material";
 import axios from "axios";
 import Head from "next/head";
 import { DataGrid } from "@mui/x-data-grid";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { authOptions } from "pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
 
 function index({ products }) {
   const router = useRouter();
@@ -42,7 +38,11 @@ function index({ products }) {
         <title>TF | Productos</title>
       </Head>
       <Layout>
-        <Button variant="contained" color="primary" onClick={()=>router.push("/products/new")}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => router.push("/products/new")}
+        >
           Nuevo Producto
         </Button>
         {products.length === 0 ? (
@@ -77,6 +77,16 @@ function index({ products }) {
 export default index;
 
 export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  if (session.role != "administrador") {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   const { data: products } = await axios.get(
     "http://localhost:3000/api/products"
   );

@@ -17,6 +17,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Typography,
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
@@ -105,6 +106,7 @@ function FormNewProduct() {
     <>
       <Container maxWidth="sm">
         <Card sx={{ p: "1rem" }}>
+        <Typography variant="overline" color="initial" align="center" component="p">{router.query.id ? "Edite" : "Ingrese"} las características del producto</Typography>
           <form onSubmit={handleSubmit}>
             <TextField
               id="name"

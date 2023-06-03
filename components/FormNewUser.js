@@ -72,6 +72,7 @@ function FormNewUser() {
     <>
       <Container maxWidth="sm">
         <Card sx={{ p: "1rem" }}>
+        <Typography variant="overline" color="initial" align="center" component="p">Ingrese las credenciales del nuevo usuario</Typography>
           <form onSubmit={handleSubmit}>
             <TextField
               id="name"

@@ -18,8 +18,7 @@ import { useRouter } from "next/router";
 import { useSession, signOut } from "next-auth/react";
 
 function Navbar() {
-  const { data: session } = useSession();
-  console.log(session)
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -65,52 +64,56 @@ function Navbar() {
                 TF
               </Link>
             </Typography>
-
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: "block", md: "none" },
-                }}
-              >
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
-                    <Link href="/products" className="decoration-none">
-                      Productos
-                    </Link>
-                  </Typography>
-                </MenuItem>
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
-                    <Link href="/users" className="decoration-none">
-                      Usuarios
-                    </Link>
-                  </Typography>
-                </MenuItem>
-              </Menu>
-            </Box>
+            {status === "authenticated" &&
+            session.role == "administrador" ? (
+              <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleOpenNavMenu}
+                  color="inherit"
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorElNav}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                  sx={{
+                    display: { xs: "block", md: "none" },
+                  }}
+                >
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">
+                      <Link href="/products" className="decoration-none">
+                        Productos
+                      </Link>
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">
+                      <Link href="/users" className="decoration-none">
+                        Usuarios
+                      </Link>
+                    </Typography>
+                  </MenuItem>
+                </Menu>
+              </Box>
+            ) : (
+              ""
+            )}
 
             <LocalCafeIcon
               sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
@@ -148,38 +151,42 @@ function Navbar() {
               </Button>
             </Box>
 
-            <Box sx={{ flexGrow: 0 }}>
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="R" src="#" />
-              </IconButton>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography
-                    textAlign="center"
-                    component="a"
-                    onClick={() => signOut()}
-                    sx={{ width: "100%" }}
-                  >
-                    Salir
-                  </Typography>
-                </MenuItem>
-              </Menu>
-            </Box>
+            {status === "authenticated" ? (
+              <Box sx={{ flexGrow: 0 }}>
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt={session.user.name} src="#" />
+                </IconButton>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography
+                      textAlign="center"
+                      component="a"
+                      onClick={() => signOut()}
+                      sx={{ width: "100%" }}
+                    >
+                      Salir
+                    </Typography>
+                  </MenuItem>
+                </Menu>
+              </Box>
+            ) : (
+              ""
+            )}
           </Toolbar>
         </Container>
       </AppBar>
