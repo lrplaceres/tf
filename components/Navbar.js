@@ -64,8 +64,7 @@ function Navbar() {
                 TF
               </Link>
             </Typography>
-            {status === "authenticated" &&
-            session.role == "administrador" ? (
+            {status === "authenticated" && session.role == "administrador" ? (
               <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
                 <IconButton
                   size="large"
@@ -112,7 +111,7 @@ function Navbar() {
                 </Menu>
               </Box>
             ) : (
-              ""
+              <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}></Box>
             )}
 
             <LocalCafeIcon
@@ -136,20 +135,24 @@ function Navbar() {
                 TF
               </Link>
             </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              <Button
-                onClick={() => router.push("/products")}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                Menú
-              </Button>
-              <Button
-                onClick={() => router.push("/users")}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                Usuarios
-              </Button>
-            </Box>
+            {status === "authenticated" && session.role == "administrador" ? (
+              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                <Button
+                  onClick={() => router.push("/products")}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  Menú
+                </Button>
+                <Button
+                  onClick={() => router.push("/users")}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  Usuarios
+                </Button>
+              </Box>
+            ) : (
+              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
+            )}
 
             {status === "authenticated" ? (
               <Box sx={{ flexGrow: 0 }}>

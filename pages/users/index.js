@@ -109,21 +109,16 @@ function index({ users }) {
 export default index;
 
 export async function getServerSideProps(context) {
-    const session = await getServerSession(
-      context.req,
-      context.res,
-      authOptions
-    );
-    console.log(context.req.cookies)
-    if (session.role != "administrador") {
-      return {
-        redirect: {
-          destination: "/",
-          permanent: false,
-        },
-      };
-    }
-    
+  const session = await getServerSession(context.req, context.res, authOptions);
+  if (session.role != "administrador") {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   const { data: users } = await axios.get("http://localhost:3000/api/users");
   return {
     props: {
