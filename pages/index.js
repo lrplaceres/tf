@@ -8,12 +8,14 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  Fab,
 } from "@mui/material";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import { useNotas } from "@/context/notasContext";
 import TabNotas from "@/components/TabNotas";
+import AddIcon from "@mui/icons-material/Add";
 
 function index() {
   const { createNota } = useNotas();
@@ -59,14 +61,17 @@ function index() {
         <title>TF</title>
       </Head>
       <Layout>
-        <Button color="primary" variant="contained" onClick={handleClickOpen}>
-          Crear Nota
-        </Button>
+        <Fab
+          color="primary"
+          aria-label="add"
+          onClick={handleClickOpen}
+          sx={{ position: "fixed", bottom: 50, right: 10 }}
+        >
+          <AddIcon />
+        </Fab>
         <Grid container spacing={1}>
           <Grid item xs={12}>
-            <TabNotas
-              notas={notas}
-            />
+            <TabNotas notas={notas} />
           </Grid>
         </Grid>
       </Layout>
@@ -93,7 +98,7 @@ function index() {
           </Button>
           <Button
             variant="contained"
-            color="error"
+            color="success"
             onClick={handleSubmitNewNota}
             disabled={!newNota.mesa}
           >

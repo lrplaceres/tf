@@ -7,6 +7,7 @@ import {
   Alert,
   Stack,
   Button,
+  Fab,
 } from "@mui/material";
 import axios from "axios";
 import Head from "next/head";
@@ -15,6 +16,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { authOptions } from "pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
+import AddIcon from "@mui/icons-material/Add";
 
 function index({ users }) {
   const router = useRouter();
@@ -50,13 +52,14 @@ function index({ users }) {
         <title>TF | Usuarios</title>
       </Head>
       <Layout>
-        <Button
-          variant="contained"
+        <Fab
           color="primary"
+          aria-label="add"
           onClick={() => router.push("/users/new")}
+          sx={{ position: "fixed", bottom: 50, right: 10 }}
         >
-          Nuevo usuario
-        </Button>
+          <AddIcon />
+        </Fab>
         <Container maxWidth="xl">
           {users.length === 0 ? (
             <Card sx={{ p: "1rem", mb: "0.5rem" }}>

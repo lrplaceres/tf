@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import { Stack, Card, Container, Alert, Button } from "@mui/material";
+import { Stack, Card, Container, Alert, Button, Fab } from "@mui/material";
 import axios from "axios";
 import Head from "next/head";
 import { DataGrid } from "@mui/x-data-grid";
@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { authOptions } from "pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
+import AddIcon from "@mui/icons-material/Add";
 
 function index({ products }) {
   const router = useRouter();
@@ -38,13 +39,14 @@ function index({ products }) {
         <title>TF | Productos</title>
       </Head>
       <Layout>
-        <Button
-          variant="contained"
+        <Fab
           color="primary"
+          aria-label="add"
           onClick={() => router.push("/products/new")}
+          sx={{ position: "fixed", bottom: 50, right: 10 }}
         >
-          Nuevo Producto
-        </Button>
+          <AddIcon />
+        </Fab>
         {products.length === 0 ? (
           <Card sx={{ p: "1rem", mb: "0.5rem" }}>
             <Stack sx={{ width: "100%" }} spacing={2}>
