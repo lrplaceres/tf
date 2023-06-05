@@ -13,29 +13,40 @@ import {
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
-import { useNotas } from "@/context/notasContext";
 import TabNotas from "@/components/TabNotas";
 import AddIcon from "@mui/icons-material/Add";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { authOptions } from "pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
+import { useRouter } from "next/router";
 
-function index() {
-  const { createNota } = useNotas();
-  const { notas } = useNotas();
+function index({notes}) {
+
+  const router = useRouter();
+
+  const { data: session, status } = useSession();
 
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
+    setNewNota({ ...newNota, creator: session.uid });
   };
   const handleClose = () => {
     setOpen(false);
     setNewNota({
       uid: uuidv4(),
-      mesa: "",
+      name: "",
+      status: "new",
+      creator: "",
     });
   };
 
   const [newNota, setNewNota] = useState({
     uid: uuidv4(),
-    mesa: "",
+    name: "",
+    status: "new",
+    creator: "",
   });
 
   const handleChangeNewNota = ({ target: { name, value } }) => {
@@ -44,12 +55,13 @@ function index() {
 
   const handleSubmitNewNota = async () => {
     try {
-      if (!newNota.mesa) {
+      if (!newNota.name) {
         return toast.error("Debe insertar la mesa");
       }
-      createNota(newNota.uid, newNota.mesa);
+      await axios.post("/api/notes/", newNota);
       handleClose();
-      toast.success(`Se ha creado con éxito la nota ${newNota.mesa}`);
+      toast.success(`Se ha creado con éxito la nota ${newNota.name}`);
+      setTimeout(() => router.push("/"), 300);
     } catch (error) {
       toast.error("Ha ocurrido un error. Contacte al administrador");
     }
@@ -71,7 +83,7 @@ function index() {
         </Fab>
         <Grid container spacing={1}>
           <Grid item xs={12}>
-            <TabNotas notas={notas} />
+            <TabNotas notas={notes} />
           </Grid>
         </Grid>
       </Layout>
@@ -86,7 +98,7 @@ function index() {
           <TextField
             id="mesa"
             label="Mesa"
-            name="mesa"
+            name="name"
             sx={{ mt: "0.5rem", mb: "0.5rem" }}
             fullWidth
             onChange={handleChangeNewNota}
@@ -100,7 +112,7 @@ function index() {
             variant="contained"
             color="success"
             onClick={handleSubmitNewNota}
-            disabled={!newNota.mesa}
+            disabled={!newNota.name}
           >
             Aceptar
           </Button>
@@ -111,3 +123,14 @@ function index() {
 }
 
 export default index;
+
+export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  const { data: notes } = await axios.get(`http://localhost:3000/api/notes/byUser/${session.uid}`);  
+  return {
+    props: {
+      notes,
+    },
+  };
+}

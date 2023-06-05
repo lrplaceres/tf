@@ -18,7 +18,7 @@ function TabNotas({ notas}) {
           {notas.map((nota, i) => (
             <Link href={`/notes/${nota.uid}`} className="decoration-none" key={`a${i.toString()}`}>
             <Card sx={{ p: "1rem" ,mb:".5rem"}} key={`b${i.toString()}`}>
-              <Typography variant="button" color="initial"><b>Mesa: </b>{nota.mesa}</Typography>              
+              <Typography variant="button" color="initial"><b>Mesa: </b>{nota.name}</Typography>              
             </Card>
             </Link>
        

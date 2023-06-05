@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 04-06-2023 a las 05:45:29
+-- Tiempo de generación: 05-06-2023 a las 04:47:28
 -- Versión del servidor: 10.6.12-MariaDB-0ubuntu0.22.04.1
 -- Versión de PHP: 8.2.6
 
@@ -24,6 +24,16 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `categories`
+--
+
+CREATE TABLE `categories` (
+  `name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `notes`
 --
 
@@ -32,7 +42,36 @@ CREATE TABLE `notes` (
   `name` varchar(100) NOT NULL,
   `status` varchar(100) NOT NULL,
   `creator` varchar(100) NOT NULL,
-  `assigned` varchar(100) NOT NULL
+  `date_open` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `notes`
+--
+
+INSERT INTO `notes` (`uid`, `name`, `status`, `creator`, `date_open`) VALUES
+('13ef4f6c-a6a5-41f0-9f1f-9e183eb6f311', 'Lazaro', 'new', '62433bf7-bc9b-43ef-a583-f9b01caad742', '2023-06-04 21:33:00'),
+('21216385-449a-4398-8982-170e40b009d8', 'correo', 'new', '62433bf7-bc9b-43ef-a583-f9b01caad742', '2023-06-04 21:34:22'),
+('9a1f39e8-1bb6-4a30-85af-83371226aa51', '77', 'new', '62433bf7-bc9b-43ef-a583-f9b01caad742', '2023-06-04 21:33:18'),
+('aff59a12-b342-4fc9-bb29-b4df741852e3', '0554', 'new', '62433bf7-bc9b-43ef-a583-f9b01caad742', '2023-06-04 17:05:13'),
+('baef5487-cfc0-46fb-a137-abcadd405774', '159', 'new', '62433bf7-bc9b-43ef-a583-f9b01caad742', '2023-06-04 17:01:28'),
+('e729496e-4b78-4f13-95ac-860ae1c7024b', '2', 'new', '62433bf7-bc9b-43ef-a583-f9b01caad742', '2023-06-04 21:42:37'),
+('f58225f0-3a46-4d64-ae2d-65576412be94', '101', 'new', '64cd9c7b-1226-4987-90a5-be74cb50a1c9', '2023-06-04 21:48:07'),
+('f604322c-d331-4adf-a882-2dc511d833a6', 'Acta', 'new', '62433bf7-bc9b-43ef-a583-f9b01caad742', '2023-06-04 21:33:38'),
+('f717633f-3eb9-44ed-b87a-69458679486d', '1236', 'new', '62433bf7-bc9b-43ef-a583-f9b01caad742', '2023-06-04 17:07:00');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pedidos`
+--
+
+CREATE TABLE `pedidos` (
+  `uid` varchar(100) NOT NULL,
+  `note` varchar(100) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `price` float NOT NULL DEFAULT 0,
+  `cant` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -129,10 +168,25 @@ INSERT INTO `users` (`uid`, `username`, `password`, `role`, `name`, `email`, `en
 --
 
 --
+-- Indices de la tabla `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`name`);
+
+--
 -- Indices de la tabla `notes`
 --
 ALTER TABLE `notes`
-  ADD PRIMARY KEY (`uid`(36));
+  ADD PRIMARY KEY (`uid`) USING BTREE,
+  ADD KEY `users_uid` (`creator`);
+
+--
+-- Indices de la tabla `pedidos`
+--
+ALTER TABLE `pedidos`
+  ADD PRIMARY KEY (`uid`),
+  ADD KEY `name_uid` (`name`),
+  ADD KEY `note_uid` (`note`);
 
 --
 -- Indices de la tabla `products`
@@ -145,6 +199,23 @@ ALTER TABLE `products`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`uid`);
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `notes`
+--
+ALTER TABLE `notes`
+  ADD CONSTRAINT `users_uid` FOREIGN KEY (`creator`) REFERENCES `users` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `pedidos`
+--
+ALTER TABLE `pedidos`
+  ADD CONSTRAINT `name_uid` FOREIGN KEY (`name`) REFERENCES `products` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `note_uid` FOREIGN KEY (`note`) REFERENCES `notes` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

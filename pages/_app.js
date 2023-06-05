@@ -9,7 +9,6 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "react-toastify/dist/ReactToastify.css";
-import { NotasProvider } from "@/context/notasContext";
 import { SessionProvider } from "next-auth/react";
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
@@ -27,10 +26,8 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
   }, []);
 
   return (
-    <SessionProvider session={session}>
-      <NotasProvider>
-        <Component {...pageProps} />
-      </NotasProvider>
+    <SessionProvider session={session}>      
+        <Component {...pageProps} />      
     </SessionProvider>
   );
 }

@@ -3,8 +3,10 @@ import { Card, Button, Grid, Typography } from "@mui/material";
 import axios from "axios";
 import Head from "next/head";
 import { useState } from "react";
+import { authOptions } from "pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
 
-function showNote({ categories, products }) {
+function showNote({ categories, products, note }) {
   const [pedido, setPedido] = useState([]);
   const [total, setTotal] = useState(0);
 
@@ -48,7 +50,7 @@ function showNote({ categories, products }) {
   return (
     <>
       <Head>
-        <title>TF | Nota</title>
+        <title>TF | {note.name}</title>
       </Head>
       <Layout>
         <Card sx={{ p: "1rem" }}>
@@ -141,6 +143,16 @@ function showNote({ categories, products }) {
 export default showNote;
 
 export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   const { data: categories } = await axios.get(
     "http://localhost:3000/api/products/categories"
   );
@@ -149,10 +161,17 @@ export async function getServerSideProps(context) {
     "http://localhost:3000/api/products/enabled"
   );
 
+  const { id } = context.query;
+
+  const { data: note } = await axios.get(
+    `http://localhost:3000/api/notes/${id}`
+  );
+
   return {
     props: {
       categories,
       products,
+      note,
     },
   };
 }
